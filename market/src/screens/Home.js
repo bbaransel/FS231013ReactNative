@@ -2,9 +2,10 @@ import { Button, FlatList, StyleSheet, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import CardComponent from '../components/CardComponent'
+import Cart from '../components/Cart'
 
 
-const Home = () => {
+const Home = ({ navigation }) => {
     const [products, setProducts] = useState([])
 
     useEffect(() => {
@@ -19,14 +20,22 @@ const Home = () => {
             console.log('Get Products Error', error)
         }
     }
+
+    const goToDetail = () => {
+        navigation.navigate("CartDetail")
+    }
+
     return (
         <View>
             <Text>App</Text>
-            <FlatList ListHeaderComponent={
-                <View>
-                    <Button title='Get Products' onPress={getData} color={'purple'} />
-                </View>
-            } data={products} renderItem={({ item }) => <CardComponent item={item} />} />
+            <Cart goToDetail={goToDetail} />
+            <FlatList
+                //  ListHeaderComponent={
+                //     <View>
+                //         <Button title='Get Products' onPress={getData} color={'purple'} />
+                //     </View>
+                // } 
+                data={products} renderItem={({ item }) => <CardComponent item={item} />} />
         </View>
     )
 }
