@@ -4,6 +4,7 @@ import axios from 'axios'
 import { Formik } from 'formik'
 import * as Yup from 'yup';
 import Toast from 'react-native-toast-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const loginSchema = Yup.object().shape({
     username: Yup.string().required("Username is required").min(4, "Username too short"),
@@ -16,8 +17,9 @@ const LoginFormik = ({ navigation }) => {
 
         try {
             await axios.post("https://dummyjson.com/auth/login", values)
-                .then(res => {
+                .then(async (res) => {
                     if (res.status === 200) {
+                        await AsyncStorage.setItem("access_token", res.data.token)
                         navigation.navigate("Home")
                         Toast.show({
                             type: "success",
